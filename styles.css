@@ -1,0 +1,354 @@
+/* zsotte.com -- Direction B, "The Track".
+   Design: trixi (zsotte-com-build-spec.md). Implementation: kevin.
+   Every colour is a token declared on the bare :root and only redefined in the
+   light / print blocks. No colour is ever declared anywhere else. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* box-sizing above is load-bearing, not housekeeping: the rail geometry in
+   section 5 of the spec assumes a 16px dot INCLUDING its 2px ring. With
+   content-box the dot renders 20px wide and every centre drifts 2px off the
+   line. Do not remove this rule. */
+
+:root{
+  /* --- dark, the default --- */
+  --bg:        #1B2A32;
+  --panel:     #22333C;
+  --ink:       #E7EEF1;
+  --body:      #C9D6DC;
+  --muted:     #93A6AF;
+  --rail:      #4E7285;
+  --mark:      #F0B429;
+
+  --font-sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px; --s5: 20px;
+  --s6: 24px; --s7: 32px; --s8: 40px; --s9: 56px; --s10: 72px;
+
+  --pad: 20px;
+  --rail-indent: 34px;
+  --maxw: 1024px;
+
+  /* type scale -- mobile column of the spec table */
+  --fs-h1:    32px;
+  --fs-lede:  17px;
+  --fs-role:  16px;
+  --fs-h2:    19px;
+  --fs-body:  16px;
+  --fs-meta:  14px;
+  --fs-year:  12px;
+  --fs-label: 11px;
+}
+
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:    #F2F5F6;
+    --panel: #E4EBEE;
+    --ink:   #14232A;
+    --body:  #2F454F;
+    --muted: #546A76;
+    --rail:  #7C97A5;
+    --mark:  #8A5A00;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F2F5F6; --panel:#E4EBEE; --ink:#14232A; --body:#2F454F;
+  --muted:#546A76; --rail:#7C97A5; --mark:#8A5A00;
+}
+
+/* ---------- fonts, self-hosted, latin subset ---------- */
+
+@font-face{
+  font-family: "Archivo";
+  src: url("/assets/fonts/archivo-latin-var.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face{
+  font-family: "JetBrains Mono";
+  src: url("/assets/fonts/jetbrains-mono-latin-var.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- base ---------- */
+
+html{
+  -webkit-text-size-adjust: 100%;
+}
+
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.page{
+  padding: var(--s9) var(--pad) var(--s10);
+}
+
+h1, h2{
+  color: var(--ink);
+  text-wrap: balance;
+  margin: 0;
+}
+
+p{ margin: 0; }
+
+/* ---------- identity ---------- */
+
+.identity{
+  margin-bottom: var(--s8);
+  overflow-wrap: break-word;
+}
+.identity h1{
+  font-size: var(--fs-h1);
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+}
+.identity .role{
+  margin-top: var(--s3);
+  font-size: var(--fs-role);
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--muted);
+}
+.identity .lede{
+  margin-top: var(--s4);
+  font-size: var(--fs-lede);
+  line-height: 1.45;
+  font-weight: 400;
+  max-width: 34ch;
+}
+
+/* ---------- the rail ---------- */
+
+.track{
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 var(--rail-indent);
+}
+
+.track::before{
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  bottom: 26px;
+  width: 2px;
+  background: var(--rail);
+}
+
+.track:empty::before{ display: none; }
+
+.stop, .pivot{
+  position: relative;
+  margin: 0 0 var(--s6);
+  overflow-wrap: break-word;
+}
+.stop:last-child, .pivot:last-child{ margin-bottom: 0; }
+
+/* a dot's centre must land 8px from the .track content-box left edge.
+   left = -(rail-indent) + (dot / 2) - 8px, minus any left border the element
+   carries, because absolute positioning is relative to the padding box. */
+.stop::before{
+  content: "";
+  position: absolute;
+  left: -34px;
+  top: 5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--rail);
+}
+
+.year{
+  font-family: var(--font-mono);
+  font-size: var(--fs-year);
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.stop h2{
+  margin-top: var(--s1);
+  font-size: var(--fs-h2);
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.org{
+  margin-top: 2px;
+  font-size: var(--fs-meta);
+  line-height: 1.45;
+  color: var(--muted);
+}
+.stop .org + p{ margin-top: var(--s2); }
+
+/* ---------- the two accented elements ---------- */
+
+.pivot::before{
+  content: "";
+  position: absolute;
+  left: -38px;
+  top: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--mark);
+  border: 2px solid var(--bg);
+}
+.pivot-label{
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  line-height: 1.3;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mark);
+  font-weight: 600;
+}
+.pivot p + p{
+  margin-top: var(--s2);
+  font-size: var(--fs-lede);
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.now{
+  background: var(--panel);
+  border-left: 2px solid var(--mark);
+  padding: var(--s4) var(--s4) var(--s5);
+}
+.now::before{ left: -36px; }
+.now .year{ color: var(--mark); }
+.now ul{
+  margin: var(--s2) 0 0;
+  padding-left: var(--s5);
+}
+.now li{ margin-top: var(--s2); }
+.now li:first-child{ margin-top: 0; }
+
+/* ---------- colophon ---------- */
+
+.colophon{
+  margin-top: var(--s8);
+  padding-top: var(--s7);
+  border-top: 1px solid var(--rail);
+}
+.colophon h2{
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  line-height: 1.3;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--muted);
+}
+.colophon h2 + p{ margin-top: var(--s3); }
+.colophon p + h2{ margin-top: var(--s7); }
+
+.contact{
+  list-style: none;
+  margin: var(--s3) 0 0;
+  padding: 0;
+}
+.contact a{
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- links ---------- */
+
+a{
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rail);
+  transition: border-color 150ms ease;
+}
+a:visited{ color: var(--ink); }
+a:hover{ border-bottom-color: var(--mark); }
+a:focus-visible{
+  outline: 2px solid var(--mark);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 379px){
+  :root{ --pad: 16px; }
+}
+
+@media (min-width: 600px){
+  :root{
+    --pad: 32px;
+    --fs-h1:    46px;
+    --fs-lede:  19px;
+    --fs-role:  17px;
+    --fs-h2:    21px;
+    --fs-body:  17px;
+    --fs-meta:  15px;
+    --fs-year:  13px;
+    --fs-label: 11px;
+  }
+}
+
+@media (min-width: 900px){
+  .page{
+    display: grid;
+    grid-template-columns: 300px minmax(0, 620px);
+    grid-template-rows: auto 1fr;
+    column-gap: 64px;
+    justify-content: center;
+  }
+  .identity { grid-column: 1; grid-row: 1; position: sticky; top: 48px; align-self: start; }
+  .colophon { grid-column: 1; grid-row: 2; align-self: start; border-top: 0; margin-top: var(--s7); padding-top: 0; }
+  main      { grid-column: 2; grid-row: 1 / 3; }
+  .track    { max-width: 62ch; }
+}
+
+@media (min-width: 1080px){
+  .page{
+    max-width: var(--maxw);
+    margin-inline: auto;
+  }
+}
+
+/* ---------- state media queries ---------- */
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-contrast: more){
+  :root{ --muted: var(--body); --rail: var(--muted); }
+}
+
+@media print{
+  :root{ --bg:#FFFFFF; --panel:#FFFFFF; --ink:#000000; --body:#1A1A1A;
+         --muted:#444444; --rail:#666666; --mark:#000000; }
+  @page{ margin: 16mm; }
+  .now{ background:none; border-left:1pt solid var(--ink); }
+  .stop, .pivot{ break-inside: avoid; }
+  .contact a[href^="http"]::after{ content:" (" attr(href) ")"; font-size:10pt; }
+  .page{ display:block; padding: 0; }
+  .identity{ position: static; }
+}
