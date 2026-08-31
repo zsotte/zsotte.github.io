@@ -1,7 +1,8 @@
 /* zsotte.com -- Direction B, "The Track".
    Design: trixi (zsotte-com-build-spec.md). Implementation: kevin.
-   Every colour is a token declared on the bare :root and only redefined in the
-   light / print blocks. No colour is ever declared anywhere else. */
+   Every colour value is written once, in the --dark-* / --light-* palettes on
+   :root. The theme states only re-point at them; the print block is the one
+   place that declares its own paper colours. */
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -11,14 +12,16 @@
    line. Do not remove this rule. */
 
 :root{
-  /* --- dark, the default --- */
-  --bg:        #1B2A32;
-  --panel:     #22333C;
-  --ink:       #E7EEF1;
-  --body:      #C9D6DC;
-  --muted:     #93A6AF;
-  --rail:      #4E7285;
-  --mark:      #F0B429;
+  /* Every colour value is written ONCE, here. The theme states below only
+     re-point --bg/--ink/... at one palette or the other. A hex value never
+     appears anywhere else in this file, and never inside a theme block. */
+  --dark-bg:#1B2A32;   --dark-panel:#22333C; --dark-ink:#E7EEF1;
+  --dark-body:#C9D6DC; --dark-muted:#93A6AF; --dark-rail:#4E7285;
+  --dark-mark:#F0B429;
+
+  --light-bg:#F2F5F6;   --light-panel:#E4EBEE; --light-ink:#14232A;
+  --light-body:#2F454F; --light-muted:#546A76; --light-rail:#7C97A5;
+  --light-mark:#8A5A00;
 
   --font-sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -28,7 +31,7 @@
 
   --pad: 20px;
   --rail-indent: 34px;
-  --maxw: 1024px;
+  --maxw: 1088px;   /* 1088 - 64px of .page padding = 1024 for the grid */
 
   /* type scale -- mobile column of the spec table */
   --fs-h1:    32px;
@@ -41,21 +44,37 @@
   --fs-label: 11px;
 }
 
+/* Four theme states, because the toggle flips whatever the system asked for.
+   color-scheme rides along with each one: it is what stops the white flash
+   before first paint, and what makes the sidebar scrollbar belong to the page
+   instead of arriving as a light system bar in a dark column. */
+
+/* 1 -- no preference, or dark preference: dark */
+:root{ color-scheme: dark;
+  --bg:var(--dark-bg); --panel:var(--dark-panel); --ink:var(--dark-ink);
+  --body:var(--dark-body); --muted:var(--dark-muted); --rail:var(--dark-rail);
+  --mark:var(--dark-mark); }
+
+/* 2 -- dark ground, toggle on: light */
+:root:has(#theme-flip:checked){ color-scheme: light;
+  --bg:var(--light-bg); --panel:var(--light-panel); --ink:var(--light-ink);
+  --body:var(--light-body); --muted:var(--light-muted); --rail:var(--light-rail);
+  --mark:var(--light-mark); }
+
 @media (prefers-color-scheme: light){
-  :root:not([data-theme="dark"]){
-    --bg:    #F2F5F6;
-    --panel: #E4EBEE;
-    --ink:   #14232A;
-    --body:  #2F454F;
-    --muted: #546A76;
-    --rail:  #7C97A5;
-    --mark:  #8A5A00;
-  }
+  /* 3 -- light preference: light */
+  :root{ color-scheme: light;
+    --bg:var(--light-bg); --panel:var(--light-panel); --ink:var(--light-ink);
+    --body:var(--light-body); --muted:var(--light-muted); --rail:var(--light-rail);
+    --mark:var(--light-mark); }
+  /* 4 -- light preference, toggle on: dark */
+  :root:has(#theme-flip:checked){ color-scheme: dark;
+    --bg:var(--dark-bg); --panel:var(--dark-panel); --ink:var(--dark-ink);
+    --body:var(--dark-body); --muted:var(--dark-muted); --rail:var(--dark-rail);
+    --mark:var(--dark-mark); }
 }
-:root[data-theme="light"]{
-  --bg:#F2F5F6; --panel:#E4EBEE; --ink:#14232A; --body:#2F454F;
-  --muted:#546A76; --rail:#7C97A5; --mark:#8A5A00;
-}
+
+::selection{ background: var(--mark); color: var(--bg); }
 
 /* ---------- fonts, self-hosted, latin subset ---------- */
 
@@ -96,7 +115,7 @@ body{
   padding: var(--s9) var(--pad) var(--s10);
 }
 
-/* Below 900px the wrapper is not a box at all, so .identity and .colophon are
+/* Below 1000px the wrapper is not a box at all, so .identity and .colophon are
    direct flex items of .page and `order` puts them back into reading shape.
    These order rules live here once -- mobile and print both rely on them. */
 .sidebar { display: contents; }
@@ -273,12 +292,48 @@ p{ margin: 0; }
   margin: var(--s3) 0 0;
   padding: 0;
 }
+/* Block, not flex: a real text-decoration on a flex container has to propagate
+   into an anonymous flex item to reach the words, and engines have differed
+   there. Block with vertical padding gives the same 48px target (12 + 27 line
+   box + 12) and puts the underline on the text, where nothing is in doubt.
+   These two are not links inside running text -- they are tap targets, and the
+   page-wide border-bottom would sit 12-14px under the words, reading as a
+   divider rather than an underline. On the two most important links here. */
 .contact a{
-  display: flex;
-  align-items: center;
+  display: block;
+  padding: 12px 0;
   min-height: 48px;
   overflow-wrap: anywhere;
+  border-bottom: 0;
+  text-decoration: underline;
+  text-decoration-color: var(--rail);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 150ms ease;
 }
+.contact a:hover{ text-decoration-color: var(--mark); }
+
+/* ---------- the theme control ---------- */
+
+/* A real checkbox with a real label: focusable, toggles with Space, announces
+   itself, and takes the same focus ring as every other control. No JavaScript;
+   the four theme states above read it with :has(). */
+.theme-flip-row{ display:flex; align-items:center; gap:var(--s2);
+                 margin-top:var(--s7); }
+.theme-flip{ appearance:none; margin:0; flex:none;
+             width:36px; height:20px; border-radius:10px;
+             border:1px solid var(--rail); background:transparent;
+             position:relative; cursor:pointer;
+             transition:border-color 150ms ease; }
+.theme-flip::after{ content:""; position:absolute; top:3px; left:3px;
+                    width:12px; height:12px; border-radius:50%;
+                    background:var(--muted);
+                    transition:transform 150ms ease, background-color 150ms ease; }
+.theme-flip:checked::after{ transform:translateX(16px); background:var(--mark); }
+.theme-flip:hover{ border-color:var(--mark); }
+.theme-flip-row label{ font-family:var(--font-mono); font-size:var(--fs-label);
+                       letter-spacing:.16em; text-transform:uppercase;
+                       color:var(--muted); cursor:pointer; }
 
 /* ---------- links ---------- */
 
@@ -316,10 +371,10 @@ a:focus-visible{
   }
 }
 
-@media (min-width: 900px){
+@media (min-width: 1000px){
   .page{
     display: grid;
-    grid-template-columns: 300px minmax(0, 620px);
+    grid-template-columns: 340px minmax(0, 620px);
     grid-template-rows: auto;
     column-gap: 64px;
     justify-content: center;
@@ -353,6 +408,10 @@ a:focus-visible{
     padding: 0 6px 6px;
     margin-inline: -6px;
     scroll-padding: 6px;
+    /* When the column is taller than the window this scrollbar appears; without
+       these two it arrives as a light system bar sitting in a dark column. */
+    scrollbar-width: thin;
+    scrollbar-color: var(--rail) transparent;
   }
   main     { grid-column: 2; grid-row: 1; }
   .track   { max-width: 62ch; }
