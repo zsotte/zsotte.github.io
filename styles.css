@@ -338,6 +338,17 @@ a:focus-visible{
     max-height: calc(100vh - 96px);
     overflow-y: auto;
     overscroll-behavior: contain;
+    /* Room for the focus ring, which is painted 4px outside the link (2px
+       outline + 2px offset) and would otherwise be clipped by this scroll
+       container -- on all four sides, because once one axis is not visible the
+       other resolves to auto too. The negative margin cancels the padding
+       exactly, so nothing moves: content position and content width are
+       identical to before. scroll-padding keeps the ring off the edge when the
+       browser scrolls a focused link into view in a column taller than the
+       window. */
+    padding: 6px;
+    margin: -6px;
+    scroll-padding: 6px;
   }
   main     { grid-column: 2; grid-row: 1; }
   .track   { max-width: 62ch; }
