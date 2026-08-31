@@ -338,16 +338,20 @@ a:focus-visible{
     max-height: calc(100vh - 96px);
     overflow-y: auto;
     overscroll-behavior: contain;
-    /* Room for the focus ring, which is painted 4px outside the link (2px
-       outline + 2px offset) and would otherwise be clipped by this scroll
-       container -- on all four sides, because once one axis is not visible the
-       other resolves to auto too. The negative margin cancels the padding
-       exactly, so nothing moves: content position and content width are
-       identical to before. scroll-padding keeps the ring off the edge when the
-       browser scrolls a focused link into view in a column taller than the
-       window. */
-    padding: 6px;
-    margin: -6px;
+    /* Room for the focus ring, painted 4px outside the link (2px outline + 2px
+       offset) and otherwise clipped by this scroll container -- at the sides
+       too, because once one axis is not visible the other resolves to auto.
+       Horizontal: the negative inline margin cancels the padding, so the
+       content keeps its exact width and left edge. Vertical: bottom padding
+       only, and NO vertical margin. The symmetric version (padding: 6px;
+       margin: -6px) is arithmetically correct too, but a sticky box is
+       constrained by its MARGIN box, and two careful readers read that
+       interaction opposite ways -- so it stays out. Bottom padding alone has no
+       interaction with sticky at all. The top needs none: the first focusable
+       element sits far below the top edge, and scroll-padding covers it once
+       the column scrolls. */
+    padding: 0 6px 6px;
+    margin-inline: -6px;
     scroll-padding: 6px;
   }
   main     { grid-column: 2; grid-row: 1; }
