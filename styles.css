@@ -379,5 +379,4 @@ a:focus-visible{
      Contact above the experience. The base order rules carry the reading shape. */
   .page{ display: flex; flex-direction: column; padding: 0; }
   .sidebar{ display: contents; }
-  .identity{ position: static; }
 }
