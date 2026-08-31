@@ -420,7 +420,11 @@ a:focus-visible{
   .colophon{ border-top: 0; margin-top: var(--s7); padding-top: 0; }
 }
 
-@media (min-width: 1080px){
+/* 1088, matching --maxw exactly: at 1080 the query would be active while the
+   cap still did nothing, because the page is narrower than the cap. A media
+   query that says 1080 and takes effect at 1088 promises something other than
+   what it does. */
+@media (min-width: 1088px){
   .page{
     max-width: var(--maxw);
     margin-inline: auto;
