@@ -1,0 +1,82 @@
+#!/bin/bash
+# Publishing this repo changes a public page that carries zsotte's name.
+# autonomy-config: publish_content is level 1 AND locked (maxLevel 1), which
+# means no agent -- not even the main agent -- may approve it. Only zsotte can.
+#
+# Twice on 2026-08-31 a push went out while that approval was still pending,
+# both times because "build it" and "publish it" travelled in one instruction
+# and the gate existed only in prose. This turns the gate into a step.
+# HATARA, OLVASD EL MIELOTT BIZOL BENNE (Trixi 2026-08-31, Kevin 2026-09-01):
+# Ez a fajl mostantol VERZIOZVA van (.githooks/pre-push), tehat a klonnal
+# egyutt jon -- a szoveg nem tunhet el csendben. AMI VISZONT NEM JON A
+# KLONNAL: a core.hooksPath beallitas, mert az lokalis git config. Friss
+# klonban a hook OTT VAN, de NEM FUT, amig valaki le nem futtatja egyszer:
+#     ./.githooks/install
+# Tehat a csendes eltunes eselye kisebb lett, de NEM nulla.
+# A megkerulhetetlen valtozat szerver-oldali (branch protection / ruleset a
+# zsotte/zsotte.github.io repon), amit a --no-verify sem kerul meg. Az a repo
+# beallitasat valtoztatja, tehat zsotte dontese. Kartya: 0a44e6ef.
+
+TOKEN_FILE="/home/zsotte/marveen/store/zsotte-com-push-approval"
+
+# Kevin eszrevetele: sikeres push utan a .inflight ottmarad, mert a pre-push nem
+# tudja hogy a push sikerult-e, es post-push hook nincs. Nem biztonsagi kerdes
+# (a hook csak a TOKEN_FILE-t nezi), csak szemet. Minden futas elejen eltakaritjuk
+# az egy oranal regebbi darabjait: addigra vagy sikerult a push, vagy a
+# visszaallitasi ablak amugy is lejart.
+find "$(dirname "$TOKEN_FILE")" -maxdepth 1 -name "$(basename "$TOKEN_FILE").inflight" -mmin +60 -delete 2>/dev/null
+
+# Kevin eszrevetele 2026-08-31: a hook eddig MINDEN pusht blokkolt. A Pages a
+# main:/-bol epit, tehat egy feature-ag feltoltese NEM publikal semmit -- azt
+# nincs mit kapuzni. A stdin soraibol ("<local ref> <local sha> <remote ref>
+# <remote sha>") szurunk a main-re.
+publishes_main=0
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  case "$remote_ref" in refs/heads/main) publishes_main=1 ;; esac
+done
+if [ "$publishes_main" -eq 0 ]; then
+  echo "pre-push: nem a main-re megy, nem publikal. Engedve."
+  exit 0
+fi
+
+if [ -f "$TOKEN_FILE" ]; then
+  granted="$(cat "$TOKEN_FILE" 2>/dev/null)"
+  age=$(( $(date +%s) - $(stat -c %Y "$TOKEN_FILE" 2>/dev/null || echo 0) ))
+  if [ "$age" -lt 3600 ]; then
+    echo "pre-push: jovahagyas ervenyes ($granted), $((age/60)) perce. Engedve."
+    # Kevin eszrevetele: a hook a push ELOTT fut, tehat itt meg nem tudjuk hogy
+    # sikerul-e. Ezert NEM toroljuk a jovahagyast, hanem felretesszuk. Ha a push
+    # elhasal (halozat, non-fast-forward, szerver-oldali elutasitas), egy mv-vel
+    # visszaall, es nem kell zsotte-t ujra megkerdezni egy meg nem tortent
+    # pushrol. Egy kapu erteket az is adja, hogy ne zaklassa feleslegesen azt,
+    # akinek a dontese vedi.
+    mv -f "$TOKEN_FILE" "$TOKEN_FILE.inflight" 2>/dev/null
+    echo "pre-push: ha a push MEGIS elhasal, ezzel all vissza egy orán belul:"
+    echo "  mv $TOKEN_FILE.inflight $TOKEN_FILE"
+    exit 0
+  fi
+  echo "pre-push: a jovahagyas $((age/60)) perces, LEJART (1 ora). Kerj ujat." >&2
+  rm -f "$TOKEN_FILE"
+  exit 1
+fi
+
+cat >&2 <<'MSG'
+
+  PUSH LEALLITVA -- nincs jovahagyas.
+
+  Ez a push a main-re menne, amibol a Pages a nyilvanos oldalt epiti,
+  ami zsotte nevet viseli. Az autonomy-config szerint a publish_content
+  level 1 ES locked (maxLevel 1): ezt SENKI nem hagyhatja jova a
+  flottaban, kizarolag zsotte.
+
+  Teendo:
+    1. Jarvis kerdezze meg zsotte-t a sajat csatornajan.
+    2. Ha IGENT mond, Jarvis letrehozza a jovahagyast:
+         date -Iseconds > /home/zsotte/marveen/store/zsotte-com-push-approval
+    3. A push egyszer megy at vele.
+
+  A jovahagyas 1 orat el, es egyetlen pushra szol. Ez nem allando engedely.
+  Feature-agra valo push NINCS kapuzva: az nem publikal semmit.
+
+MSG
+exit 1
