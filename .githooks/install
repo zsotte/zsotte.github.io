@@ -1,0 +1,25 @@
+#!/bin/bash
+# Wire this clone to the versioned hooks in .githooks/.
+#
+# Why this exists: the hook script is versioned, but core.hooksPath is local git
+# config -- it does NOT travel with a clone. Without this one command the hook
+# sits in the tree and never runs. Run it once per clone.
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+git config core.hooksPath .githooks
+chmod +x .githooks/pre-push .githooks/install
+
+# A leftover .git/hooks/pre-push is now dead code: with core.hooksPath set, git
+# ignores .git/hooks entirely. Two copies of one gate drift apart, and the stale
+# one reads like protection it no longer provides. Say so out loud.
+if [ -e .git/hooks/pre-push ]; then
+  echo "note: .git/hooks/pre-push still exists, but no longer runs (core.hooksPath)."
+  echo "      Once you are sure .githooks/pre-push is the one you want, delete it:"
+  echo "        rm .git/hooks/pre-push"
+fi
+
+echo "core.hooksPath -> $(git config --get core.hooksPath)"
+echo "done: the pre-push signpost is live in this clone."

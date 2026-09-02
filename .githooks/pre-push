@@ -1,0 +1,68 @@
+#!/bin/bash
+# The explaining half of the publish gate for zsotte.com.
+#
+# main is what GitHub Pages builds the public site from, so landing a commit on
+# main is a publication, and publication is the owner's decision alone.
+#
+# This hook used to be the lock. It is not any more, and pretending otherwise
+# would be the more dangerous state. Since 2026-09-01 a repository ruleset on
+# main requires a pull request with no bypass actors, so a direct push to main
+# is refused by the server -- measured, including with --no-verify.
+#
+# What a client-side hook can still do is the one thing a server-side refusal
+# does badly: say, at the moment you try, which road replaced the one you took.
+# So it stops early and prints the route. Read it as a signpost, not a lock:
+# --no-verify walks past it, and nothing is lost when it does, because the
+# ruleset is still there behind it.
+#
+# Pushes to any other branch are untouched -- they publish nothing.
+
+targets_main=0
+deletes_main=0
+
+# stdin gives one line per ref being pushed:
+#   <local ref> <local sha> <remote ref> <remote sha>
+# The THIRD field is the destination, and that is the only one that decides
+# whether this push publishes.
+while read -r _local_ref local_sha remote_ref _remote_sha; do
+  case "$remote_ref" in
+    refs/heads/main)
+      targets_main=1
+      # An all-zero local sha means "delete this remote ref".
+      case "$local_sha" in *[!0]*) ;; *) deletes_main=1 ;; esac
+      ;;
+  esac
+done
+
+if [ "$targets_main" -eq 0 ]; then
+  echo "pre-push: nothing here targets main, so nothing publishes. Allowed."
+  exit 0
+fi
+
+{
+  echo
+  if [ "$deletes_main" -eq 1 ]; then
+    echo "  STOPPED -- this would DELETE main on the remote."
+    echo
+    echo "  main is the published site. The ruleset refuses deletion and"
+    echo "  force-pushes on main, so this cannot succeed anyway."
+  else
+    echo "  STOPPED -- a direct push to main is not the way to publish any more."
+    echo
+    echo "  main is what Pages builds the public site from. Since 2026-09-01"
+    echo "  the ruleset on this repo requires a pull request for main, with no"
+    echo "  bypass actors, so this push would be refused by GitHub as well."
+    echo
+    echo "  The route that works:"
+    echo
+    echo "    git push origin HEAD:refs/heads/<branch>   # free, publishes nothing"
+    echo "    gh pr create --base main"
+    echo "    # then the owner approves, and the MERGE is the publication"
+    echo
+    echo "  Merging is the moment that publishes, and it is the owner's call."
+    echo "  Nobody in the fleet may take it for them."
+  fi
+  echo
+} >&2
+
+exit 1
