@@ -16,10 +16,10 @@ chmod +x .githooks/pre-push .githooks/install
 # ignores .git/hooks entirely. Two copies of one gate drift apart, and the stale
 # one reads like protection it no longer provides. Say so out loud.
 if [ -e .git/hooks/pre-push ]; then
-  echo "figyelem: .git/hooks/pre-push meg letezik, de mar NEM fut (core.hooksPath)."
-  echo "         Ha biztos vagy benne hogy a .githooks/pre-push a jo, torold:"
-  echo "           rm .git/hooks/pre-push"
+  echo "note: .git/hooks/pre-push still exists, but no longer runs (core.hooksPath)."
+  echo "      Once you are sure .githooks/pre-push is the one you want, delete it:"
+  echo "        rm .git/hooks/pre-push"
 fi
 
 echo "core.hooksPath -> $(git config --get core.hooksPath)"
-echo "kesz: a pre-push kapu ebben a klonban aktiv."
+echo "done: the pre-push signpost is live in this clone."
