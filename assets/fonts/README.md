@@ -28,18 +28,21 @@ than guessing at the path:
 
 The `latin` block is the one whose `unicode-range` starts `U+0000-00FF`.
 
-## Two characters this page cannot lose
+## Three characters this page cannot lose
 
-The copy needs exactly two non-ASCII characters, and both are silent failures if
-a future subset drops them: the text does not break, it switches mid-line to a
+The copy needs exactly three non-ASCII characters, and each is a silent failure
+if a future subset drops it: the text does not break, it switches mid-line to a
 fallback font.
 
 | Character | Codepoint | Where it appears |
 |---|---|---|
 | Middle dot `·` | U+00B7 | role line and every org line |
 | En dash `–` | U+2013 | every year range |
+| E acute `é` | U+00E9 | the name itself, in the `h1` and the `title` |
 
-Both were verified in the shipped files, not assumed: the upstream TTF's `cmap`
-maps U+00B7 to glyph 574 and U+2013 to glyph 593, and the woff2 latin subset
-declares `U+0000-00FF` and `U+2000-206F`, which cover them. If you ever narrow
-the subset, check these two first.
+All three sit inside the woff2 latin subset, which declares `U+0000-00FF` and
+`U+2000-206F`. The first two were verified against the upstream TTF's `cmap`
+(U+00B7 -> glyph 574, U+2013 -> glyph 593); U+00E9 falls in the same declared
+`U+0000-00FF` block. If you ever narrow the subset, check these three first --
+and note that the `é` is the one a reader would actually notice, because it is
+in the name at the top of the page.
