@@ -212,7 +212,7 @@
   ],
   "videos": [
     {
-      "src": "media/videos/eskuvo-klip.mp4",
+      "src": "media/videos/eskuvo-klip.mp4?v=2",
       "poster": "media/posters/eskuvo-klip.jpg",
       "title": "A reggelünk 40 másodpercben",
       "duration": "0:40",
