@@ -103,6 +103,10 @@
     el.preload = "none";
     el.playsInline = true;
     if (v.poster) el.poster = v.poster;
+    if (v.w && v.h) {
+      el.style.aspectRatio = `${v.w} / ${v.h}`;
+      if (v.h > v.w) card.classList.add("portrait");
+    }
     const s = document.createElement("source");
     s.src = v.src;
     s.type = "video/mp4";

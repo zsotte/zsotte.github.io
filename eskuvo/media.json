@@ -3,7 +3,7 @@
     "date": "2026. október 10.",
     "place": "Bali",
     "intro": [
-      "2026. október 10-én, napfelkeltekor, Bali tengerpartján kimondtuk az igent. Csak mi ketten voltunk ott, meg a tenger és a felkelő nap.",
+      "2026. október 10-én, napfelkeltekor, Bali tengerpartján kimondtuk az igent.",
       "Ide gyűjtöttük össze a reggel legszebb pillanatait a virágkapu alatti fogadalomtól az első közös koccintásig. Nézegessétek, töltsétek le, ami tetszik.",
       "Jó érzés, hogy így utólag ti is velünk lehettek ezen a reggelen."
     ],
@@ -210,5 +210,14 @@
       "taken": "2026-10-10T07:44:22"
     }
   ],
-  "videos": []
+  "videos": [
+    {
+      "src": "media/videos/eskuvo-klip.mp4",
+      "poster": "media/posters/eskuvo-klip.jpg",
+      "title": "A reggelünk 40 másodpercben",
+      "duration": "0:40",
+      "w": 1080,
+      "h": 1920
+    }
+  ]
 }
