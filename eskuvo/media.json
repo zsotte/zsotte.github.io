@@ -1,0 +1,214 @@
+{
+  "info": {
+    "date": "2026. október 10.",
+    "place": "Bali",
+    "intro": [
+      "2026. október 10-én, napfelkeltekor, Bali tengerpartján kimondtuk az igent.",
+      "Ide gyűjtöttük össze a nap legszebb pillanatait a virágív alatti fogadalomtól az első közös koccintásig. Nézegessétek, töltsétek le, ami tetszik.",
+      "Köszönjük mindenkinek, aki velünk volt, akár ott a homokban, akár gondolatban, otthonról."
+    ],
+    "signature": "Viktória és Zsolt",
+    "music": "assets/music.mp3"
+  },
+  "photos": [
+    {
+      "src": "media/photos/20261010-070409.jpg",
+      "thumb": "media/thumbs/20261010-070409.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:04:10"
+    },
+    {
+      "src": "media/photos/20261010-070820.jpg",
+      "thumb": "media/thumbs/20261010-070820.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:08:20"
+    },
+    {
+      "src": "media/photos/20261010-070939.jpg",
+      "thumb": "media/thumbs/20261010-070939.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:09:39"
+    },
+    {
+      "src": "media/photos/20261010-071148.jpg",
+      "thumb": "media/thumbs/20261010-071148.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:11:49"
+    },
+    {
+      "src": "media/photos/20261010-071212.jpg",
+      "thumb": "media/thumbs/20261010-071212.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:12:13"
+    },
+    {
+      "src": "media/photos/20261010-071302.jpg",
+      "thumb": "media/thumbs/20261010-071302.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:13:02"
+    },
+    {
+      "src": "media/photos/20261010-071411.jpg",
+      "thumb": "media/thumbs/20261010-071411.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:14:11"
+    },
+    {
+      "src": "media/photos/20261010-071445.jpg",
+      "thumb": "media/thumbs/20261010-071445.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:14:46"
+    },
+    {
+      "src": "media/photos/20261010-071922-0.jpg",
+      "thumb": "media/thumbs/20261010-071922-0.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:19:23"
+    },
+    {
+      "src": "media/photos/20261010-071954.jpg",
+      "thumb": "media/thumbs/20261010-071954.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:19:54"
+    },
+    {
+      "src": "media/photos/20261010-072020.jpg",
+      "thumb": "media/thumbs/20261010-072020.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:20:20"
+    },
+    {
+      "src": "media/photos/20261010-072105.jpg",
+      "thumb": "media/thumbs/20261010-072105.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:21:06"
+    },
+    {
+      "src": "media/photos/20261010-072209.jpg",
+      "thumb": "media/thumbs/20261010-072209.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:22:09"
+    },
+    {
+      "src": "media/photos/20261010-072235.jpg",
+      "thumb": "media/thumbs/20261010-072235.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:22:35"
+    },
+    {
+      "src": "media/photos/20261010-072459.jpg",
+      "thumb": "media/thumbs/20261010-072459.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:24:59"
+    },
+    {
+      "src": "media/photos/20261010-072641.jpg",
+      "thumb": "media/thumbs/20261010-072641.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:26:42"
+    },
+    {
+      "src": "media/photos/20261010-072940.jpg",
+      "thumb": "media/thumbs/20261010-072940.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:29:41"
+    },
+    {
+      "src": "media/photos/20261010-072950.jpg",
+      "thumb": "media/thumbs/20261010-072950.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:29:50"
+    },
+    {
+      "src": "media/photos/20261010-073042.jpg",
+      "thumb": "media/thumbs/20261010-073042.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:30:43"
+    },
+    {
+      "src": "media/photos/20261010-073552.jpg",
+      "thumb": "media/thumbs/20261010-073552.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:35:52"
+    },
+    {
+      "src": "media/photos/20261010-073711.jpg",
+      "thumb": "media/thumbs/20261010-073711.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:37:11"
+    },
+    {
+      "src": "media/photos/20261010-074422.jpg",
+      "thumb": "media/thumbs/20261010-074422.webp",
+      "w": 323,
+      "h": 700,
+      "group": "",
+      "caption": "",
+      "taken": "2026-10-10T07:44:22"
+    }
+  ],
+  "videos": []
+}

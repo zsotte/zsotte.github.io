@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+  <meta name="theme-color" content="#F4EFE8">
+  <title>Viktória és Zsolt · 2026. október 10.</title>
+  <meta name="description" content="Viktória és Zsolt esküvőjének fotói és videói">
+  <meta property="og:title" content="Viktória és Zsolt · Bali, 2026. október 10.">
+  <meta property="og:description" content="Fotók és videók az esküvőnkről">
+  <meta property="og:image" content="https://zsotte.com/eskuvo/assets/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" as="image" href="assets/hero.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <span class="orb o1"></span>
+    <span class="orb o2"></span>
+    <span class="orb o3"></span>
+  </div>
+  <canvas id="petals" aria-hidden="true"></canvas>
+
+  <header class="hero">
+    <div class="hero-media" aria-hidden="true"><img src="assets/hero.jpg" alt="" fetchpriority="high"></div>
+    <p class="eyebrow reveal" id="wedding-date">2026. október 10.</p>
+    <h1 class="reveal">
+      <span class="name">Viktória</span>
+      <span class="amp">&amp;</span>
+      <span class="name">Zsolt</span>
+    </h1>
+    <p class="lede reveal" id="wedding-place"></p>
+    <a class="scroll-cue reveal" href="#bevezeto" aria-label="Tovább">
+      <span></span>
+    </a>
+  </header>
+
+  <section class="intro" id="bevezeto">
+    <div class="intro-inner">
+      <p class="kicker reveal">A nagy nap</p>
+      <div class="intro-text" id="intro-text"></div>
+      <p class="signature reveal" id="intro-signature"></p>
+    </div>
+    <nav class="tabs reveal" aria-label="Szakaszok">
+      <a href="#fotok" class="tab">Fotók <span id="photo-count"></span></a>
+      <a href="#videok" class="tab">Videók <span id="video-count"></span></a>
+    </nav>
+  </section>
+
+  <main>
+    <section id="fotok" aria-labelledby="fotok-cim">
+      <div class="section-head reveal">
+        <h2 id="fotok-cim">Fotók</h2>
+        <div class="filters" id="filters" role="group" aria-label="Szűrés"></div>
+      </div>
+      <div class="gallery" id="gallery"></div>
+      <p class="empty" id="photos-empty" hidden>A fotók hamarosan érkeznek.</p>
+    </section>
+
+    <section id="videok" aria-labelledby="videok-cim">
+      <div class="section-head reveal">
+        <h2 id="videok-cim">Videók</h2>
+      </div>
+      <div class="videos" id="videos"></div>
+      <p class="empty" id="videos-empty" hidden>A videók hamarosan érkeznek.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p class="reveal">Köszönjük, hogy velünk ünnepeltetek.</p>
+    <p class="mono reveal">V &amp; Zs · 2026.10.10.</p>
+  </footer>
+
+  <button class="music" id="music" hidden aria-pressed="false" aria-label="Zene be">
+    <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <span class="music-label">Zene</span>
+  </button>
+  <audio id="audio" loop preload="none"></audio>
+
+  <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Kép nagyítva">
+    <button class="lb-btn lb-close" id="lb-close" aria-label="Bezárás">&times;</button>
+    <button class="lb-btn lb-prev" id="lb-prev" aria-label="Előző">&#8249;</button>
+    <figure>
+      <img id="lb-img" alt="">
+      <figcaption>
+        <span id="lb-caption"></span>
+        <span class="lb-meta"><span id="lb-pos"></span> · <a id="lb-download" download>Letöltés</a></span>
+      </figcaption>
+    </figure>
+    <button class="lb-btn lb-next" id="lb-next" aria-label="Következő">&#8250;</button>
+  </div>
+
+  <script src="assets/app.js" defer></script>
+</body>
+</html>
