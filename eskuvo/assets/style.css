@@ -234,7 +234,8 @@ h2 { margin: 0; font: 300 clamp(36px, 5vw, 56px)/1.05 var(--serif); }
 }
 .filters button[aria-pressed="true"] { color: var(--ink); border-color: var(--line); background: var(--surface); }
 
-.gallery { columns: 4 260px; column-gap: 14px; }
+.gallery { display: flex; gap: 14px; align-items: flex-start; }
+.gcol { flex: 1; min-width: 0; }
 .gallery a {
   display: block;
   margin-bottom: 14px;
@@ -306,7 +307,7 @@ footer .mono { margin-top: 10px; font: 400 11px var(--sans); letter-spacing: .3e
 
 @media (max-width: 640px) {
   .hero-media img { object-position: 50% 46%; }
-  .gallery { columns: 2; column-gap: 8px; }
+  .gallery { gap: 8px; }
   .gallery a { margin-bottom: 8px; }
   .lb-prev, .lb-next { display: none; }
   .music { right: 12px; bottom: 12px; }

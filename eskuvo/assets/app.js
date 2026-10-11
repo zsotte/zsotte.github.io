@@ -38,12 +38,24 @@
   const gallery = $("gallery");
   let visible = photos;
 
+  // Időrendben balra-jobbra töltött oszlopok: mindig a legrövidebb oszlop kapja a következő képet
+  const colCount = () => (innerWidth >= 1100 ? 4 : innerWidth >= 760 ? 3 : 2);
+  let cols = 0;
+
   function renderGallery() {
+    cols = colCount();
     gallery.innerHTML = "";
+    const columns = Array.from({ length: cols }, () => {
+      const c = document.createElement("div");
+      c.className = "gcol";
+      gallery.appendChild(c);
+      return c;
+    });
+    const heights = new Array(cols).fill(0);
     visible.forEach((p, i) => {
       const a = document.createElement("a");
       a.href = p.src;
-      a.style.transitionDelay = `${(i % 4) * 70}ms`;
+      a.style.transitionDelay = `${(i % cols) * 70}ms`;
       const img = document.createElement("img");
       img.src = p.thumb;
       img.alt = p.caption || "";
@@ -53,7 +65,10 @@
       img.height = p.h;
       a.appendChild(img);
       a.addEventListener("click", (e) => { e.preventDefault(); openLb(i); });
-      gallery.appendChild(a);
+      let k = 0;
+      for (let j = 1; j < cols; j++) if (heights[j] < heights[k] - 0.01) k = j;
+      columns[k].appendChild(a);
+      heights[k] += p.h / p.w;
       observe(a);
     });
     $("photos-empty").hidden = visible.length > 0;
@@ -76,6 +91,7 @@
     });
   }
   renderGallery();
+  addEventListener("resize", () => { if (colCount() !== cols) renderGallery(); });
 
   // Videók
   const vwrap = $("videos");
